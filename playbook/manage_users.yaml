@@ -1,0 +1,21 @@
+- hosts: partners
+  become: true
+  gather_facts: false
+  vars:
+    username: bob
+  tasks:
+  - name: Create group
+    group:
+      name: billing
+      state: present
+  - name: Create user
+    user:
+      name: "{{ username }}"
+      state: present
+      generate_ssh_key: true
+      group: billing
+    register: out
+  - name: SSH public key
+    debug:
+      msg: "{{ out.ssh_public_key }}"
+      
